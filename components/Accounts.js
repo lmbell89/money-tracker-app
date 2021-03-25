@@ -1,11 +1,17 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import { Button } from 'react-native-paper'
+
+import { deleteAccount } from '../db/database'
 
 const Accounts = ({ accounts }) => {
+  console.log(accounts)
+
   return (
-    <View>
-      {accounts?.map(account => {
-          <View key={id} style={styles.container}>
+    <View>      
+      {accounts.map(account => {
+        <View>
+          <View key={account.id} style={styles.container}>
             <Text style={styles.text}>
               {account.name}
             </Text>
@@ -13,6 +19,11 @@ const Accounts = ({ accounts }) => {
               {`£${account.balance.toFixed(2)}`}
             </Text>
           </View>
+
+          <Button onPress={deleteAccount}>
+            Delete
+          </Button>
+        </View>
       })}
     </View>
   )

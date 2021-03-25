@@ -3,8 +3,9 @@ import { BottomNavigation } from 'react-native-paper'
 
 import Accounts from './Accounts'
 import Bills from './Bills'
+import { deleteIncome, deleteBill } from '../db/database'
 
-const BottomNav = ({ navIndex, setNavIndex }) => {
+const BottomNav = ({ navIndex, setNavIndex, accounts, incomes, bills }) => {
   const routes = [
     { key: 'accounts', title: 'Accounts', icon: 'card-account-details-outline' },
     { key: 'incomes', title: 'Incomes', icon: 'history' },
@@ -13,8 +14,8 @@ const BottomNav = ({ navIndex, setNavIndex }) => {
 
   const renderScene = BottomNavigation.SceneMap({
     accounts: () => Accounts({ accounts }),
-    incomes: () => Bills({ incomes }),
-    bills: () => Bills({ bills }),
+    incomes: () => Bills({ incomes, deleteFn: deleteIncome }),
+    bills: () => Bills({ bills, deleteFn: deleteBill }),
   })
 
   return (

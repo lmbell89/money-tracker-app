@@ -22,7 +22,7 @@ export default function App() {
   const loadedContent = (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator 
+      <Stack.Navigator 
           initialRouteName="Home"
           screenOptions={{header: props => TopNav(props)}}
           >

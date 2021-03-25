@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
 
-import { insertAccount } from '../db/Database'
+import { insertAccount } from '../db/database'
 
 const AddPage = ({ navigation }) => {
   const [name, setName] = useState("")

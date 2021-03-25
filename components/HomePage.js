@@ -14,13 +14,16 @@ const HomePage = ({ navigation }) => {
 
   const isFocused = useIsFocused()
 
+  const display = (accounts) => {
+    console.log(accounts)
+    setAccounts(accounts)
+  }
+
   useEffect(() => {
-    if (isFocused) {
-      selectAccounts(setAccounts)
-      selectIncomes(setIncomes)
-      selectBills(setBills)
-    }
-  }, [isFocused])
+    selectAccounts(display)
+    selectIncomes(setIncomes)
+    selectBills(setBills)
+  }, [])
 
   return (
     <Portal.Host>

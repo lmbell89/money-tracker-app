@@ -1,18 +1,26 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import { Button } from 'react-native-paper'
 
-const Bills = ({ bills }) => {
+const Bills = ({ bills, deleteFn }) => {
   return (
     <View>
       {bills?.map(bill => {
-          <View key={id} style={styles.container}>
+        <View>
+          <View key={bill.id} style={styles.container}>
             <Text style={styles.text}>
               {bill.name}
             </Text>
+
             <Text style={styles.text}>
               {`£${bill.value.toFixed(2)}`}
             </Text>
           </View>
+          <Button onPress={deleteFn}>
+              Delete
+            </Button>
+        </View>
+
       })}
     </View>
   )
