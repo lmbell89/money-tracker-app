@@ -16,134 +16,81 @@ export const migrate = () => {
   })
 }
 
-export const selectAccounts = (callback) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'select * from accounts', 
-      [],
-      (_, { rows: { _array } }) => callback(_array),
-      (_, err) => console.log(err)
-    )
+const promisifyTx = (statement, args) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        statement, 
+        args,
+        (_, resultset) => resolve(resultset),
+        (_, err) => reject(err)
+      )
+    })
   })
+}
+
+export const selectAccounts = () => {
+  return promisifyTx('select * from accounts', [])
 }
 
 export const insertAccount = (name, balance) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'insert into accounts (name, balance) values(?, ?)', 
-      [name, balance],
-      () => null,
-      (_, err) => console.log(err)
-    )
-  })
+  return promisifyTx(
+    'insert into accounts (name, balance) values(?, ?)', 
+    [name, balance]
+  )
 }
 
 export const updateAccount = (id, name, balance) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'update accounts set name = ?, balance = ? where id = ?', 
-      [name, balance, id],
-      () => null,
-      (_, err) => console.log(err)
-    )
-  })
+  return promisifyTx(
+    'update accounts set name = ?, balance = ? where id = ?', 
+    [name, balance, id]
+  )
 }
 
 export const deleteAccount = (id) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'delete from accounts where id = ?', 
-      [id],
-      () => null,
-      (_, err) => console.log(err)
-    )
-  })
+  return promisifyTx('delete from accounts where id = ?', [id])
 }
 
-export const selectIncomes = (callback) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'select * from incomes', 
-      [],
-      (_, { rows: { _array } }) => callback(_array),
-      (_, err) => console.log(err)
-    )
-  })
+export const selectIncomes = () => {
+  return promisifyTx('select * from incomes', [])
 }
 
 export const insertIncome = (name, value) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'insert into incomes (name, value) values(?, ?)', 
-      [name, value],
-      () => null,
-      (_, err) => console.log(err)
-    )
-  })
+  return promisifyTx(
+    'insert into incomes (name, value) values(?, ?)', 
+    [name, value]
+  )
 }
 
 export const updateIncome = (id, name, value) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'update incomes set name = ?, value = ? where id = ?', 
-      [name, value, id],
-      () => null,
-      (_, err) => console.log(err)
-    )
-  })
+  return promisifyTx(
+    'update incomes set name = ?, value = ? where id = ?', 
+    [name, value, id]
+  )
 }
 
 export const deleteIncome = (id) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'delete from incomes where id = ?', 
-      [id],
-      () => null,
-      (_, err) => console.log(err)
-    )
-  })
+  return promisifyTx('delete from incomes where id = ?', [id])
 }
 
-export const selectBills = (callback) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'select * from bills', 
-      [],
-      (_, { rows: { _array } }) => callback(_array),
-      (_, err) => console.log(err)
-    )
-  })
+export const selectBills = () => {
+  return promisifyTx('select * from bills', [])
 }
 
 export const insertBill = (name, value) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'insert into bills (name, value) values(?, ?)', 
-      [name, value],
-      () => null,
-      (_, err) => console.log(err)
-    )
-  })
+  return promisifyTx(
+    'insert into bills (name, value) values(?, ?)', 
+    [name, value]
+  )
 }
 
 export const updateBill = (id, name, value) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'update bills set name = ?, value = ? where id = ?', 
-      [name, value, id],
-      () => null,
-      (_, err) => console.log(err)
-    )
-  })
+  return promisifyTx(
+    'update bills set name = ?, value = ? where id = ?', 
+    [name, value, id]
+  )
 }
 
 export const deleteBill = (id) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'delete from bills where id = ?', 
-      [id],
-      () => null,
-      (_, err) => console.log(err)
-    )
-  })
+  return promisifyTx('delete from bills where id = ?', [id])
 }

@@ -6,21 +6,22 @@ const Bills = ({ bills, deleteFn }) => {
   return (
     <View>
       {bills?.map(bill => {
-        <View>
-          <View key={bill.id} style={styles.container}>
-            <Text style={styles.text}>
-              {bill.name}
-            </Text>
+        return (
+          <View>
+            <View key={bill.id} style={styles.container}>
+              <Text style={styles.text}>
+                {bill.name}
+              </Text>
 
-            <Text style={styles.text}>
-              {`£${bill.value.toFixed(2)}`}
-            </Text>
+              <Text style={styles.text}>
+                {`£${bill.value.toFixed(2)}`}
+              </Text>
+            </View>
+            <Button onPress={deleteFn}>
+                Delete
+              </Button>
           </View>
-          <Button onPress={deleteFn}>
-              Delete
-            </Button>
-        </View>
-
+        )
       })}
     </View>
   )

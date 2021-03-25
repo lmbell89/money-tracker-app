@@ -3,9 +3,23 @@ import { BottomNavigation } from 'react-native-paper'
 
 import Accounts from './Accounts'
 import Bills from './Bills'
-import { deleteIncome, deleteBill } from '../db/database'
+import Spinner from './Spinner'
 
-const BottomNav = ({ navIndex, setNavIndex, accounts, incomes, bills }) => {
+const BottomNav = ({ 
+  navIndex, 
+  setNavIndex, 
+  accounts, 
+  incomes, 
+  bills,
+  loadingAccounts,
+  loadingIncomes,
+  loadingBills,
+  removeAccount
+}) => {
+
+  console.log(accounts)
+  console.log(loadingAccounts)
+
   const routes = [
     { key: 'accounts', title: 'Accounts', icon: 'card-account-details-outline' },
     { key: 'incomes', title: 'Incomes', icon: 'history' },
@@ -13,9 +27,9 @@ const BottomNav = ({ navIndex, setNavIndex, accounts, incomes, bills }) => {
   ]
 
   const renderScene = BottomNavigation.SceneMap({
-    accounts: () => Accounts({ accounts }),
-    incomes: () => Bills({ incomes, deleteFn: deleteIncome }),
-    bills: () => Bills({ bills, deleteFn: deleteBill }),
+    accounts: () => loadingAccounts ? <Spinner/> : Accounts({ accounts, removeAccount }),
+    incomes: () => loadingIncomes ? <Spinner/> : Bills({ incomes, removeAccount }),
+    bills: () => loadingBills ? <Spinner/> : Bills({ bills, removeAccount }),
   })
 
   return (

@@ -1,16 +1,24 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
-
-import { insertAccount } from '../db/database'
+import isCurrency from 'validator/lib/isCurrency'
 
 const AddPage = ({ navigation }) => {
   const [name, setName] = useState("")
   const [balance, setBalance] = useState("")
 
   const submit = () => {
-    insertAccount(name, balance)
-    navigation.goBack()
+    navigation.navigate("HomePage", { 
+      name, 
+      balance: parseFloat(balance), 
+      type: 'account'
+    })
+  }
+
+  const currencyChange = (str) => {
+    if (isCurrency(str, {digits_after_decimal: [1, 2]})) {
+      setBalance(str)
+    }
   }
 
   return (
@@ -29,7 +37,7 @@ const AddPage = ({ navigation }) => {
         label="Balance"
         keyboardType="numeric"
         value={balance}
-        onChangeText={setBalance}
+        onChangeText={currencyChange}
       />
 
       <Button 

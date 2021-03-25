@@ -22,11 +22,11 @@ export default function App() {
   const loadedContent = (
     <PaperProvider>
       <NavigationContainer>
-      <Stack.Navigator 
-          initialRouteName="Home"
+        <Stack.Navigator 
+          initialRouteName="HomePage"
           screenOptions={{header: props => TopNav(props)}}
-          >
-          <Stack.Screen name="Home" component={HomePage} />
+        >
+          <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="AddAccount" component={AddPage} />
         </Stack.Navigator>
       </NavigationContainer>
