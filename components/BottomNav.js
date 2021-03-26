@@ -16,10 +16,7 @@ const BottomNav = ({
   loadingBills,
   removeAccount
 }) => {
-
-  console.log(accounts)
-  console.log(loadingAccounts)
-
+  
   const routes = [
     { key: 'accounts', title: 'Accounts', icon: 'card-account-details-outline' },
     { key: 'incomes', title: 'Incomes', icon: 'history' },

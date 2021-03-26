@@ -2,13 +2,13 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { FAB, Portal } from 'react-native-paper'
 
-const AddButton = ({ navigation }) => {
+const AddButton = ({ navigation, navType }) => {
   return(
     <Portal>
       <FAB
         style={styles.fab}
         icon="plus"
-        onPress={() => navigation.navigate("AddAccount")}
+        onPress={() => navigation.navigate("Add", { type: navType })}
       />
     </Portal>
   )

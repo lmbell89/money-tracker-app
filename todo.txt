@@ -1,0 +1,8 @@
+add handles incomes and bills
+centre spinner
+test error snack
+income and bills pages
+overview page
+spinner during migrate
+recurrence for incomes and bills
+color scheme and background?

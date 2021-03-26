@@ -29,7 +29,7 @@ const Accounts = ({ accounts, removeAccount }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   text: {
     flex: 1

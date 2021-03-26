@@ -27,7 +27,7 @@ export default function App() {
           screenOptions={{header: props => TopNav(props)}}
         >
           <Stack.Screen name="HomePage" component={HomePage} />
-          <Stack.Screen name="AddAccount" component={AddPage} />
+          <Stack.Screen name="Add" component={AddPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

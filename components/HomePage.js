@@ -11,7 +11,7 @@ import {
   deleteBill,
   insertAccount,
   insertIncome,
-  insertBill, 
+  insertBill,
   selectAccounts, 
   selectBills, 
   selectIncomes,
@@ -37,15 +37,20 @@ const HomePage = ({ route, navigation }) => {
   }, [])
 
   useFocusEffect(() => {
-    if (route.params?.type === 'account') {
-      addAccount(route.params.name, route.params.balance)
-    } else if (route.params?.type === 'account') {
-      addIncome(route.params.name, route.params.value)
-    } else if (route.params?.type === 'account') {
-      addBill(route.params.name, route.params.value)
+    if (!route.params) return
+
+    const {name, value, period, date, type} = route.params
+
+    if (type === 'account') {
+      addAccount(name, value)
+    } else if (type === 'income') {
+      addIncome(name, value, date, period)
+    } else if (type === 'bill') {
+      addBill(name, value, date, period)
     }
-    route.params = null
   })
+
+  const navType = ['accounts', 'incomes', 'bills'][navIndex]
 
   const getAccounts = () => {
     setLoadingAccounts(true)
@@ -175,7 +180,7 @@ const HomePage = ({ route, navigation }) => {
       />
 
       <Portal>
-        <AddButton navigation={navigation} addAccount={addAccount} />
+        <AddButton navigation={navigation} navType={navType} />
         <ErrorSnack error={error} setError={setError} />
       </Portal>
     </Portal.Host>
