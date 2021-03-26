@@ -5,13 +5,27 @@ export const db = SQLite.openDatabase('expenses-app')
 export const migrate = () => {
   db.transaction(tx => {
     tx.executeSql(
-      'create table if not exists accounts (id integer primary key not null, name text, balance float);'
+      'create table if not exists accounts (' +
+        'id integer primary key not null, name text, balance float' +
+      ');'
     )
     tx.executeSql(
-      'create table if not exists incomes (id integer primary key not null, name text, value float);'
+      'create table if not exists incomes (' +
+        'id integer primary key not null,' +
+        'name text,' +
+        'value float' +
+        'date date' +
+        'period text' +
+      ');'
     )
     tx.executeSql(
-      'create table if not exists bills (id integer primary key not null, name text, value float);'
+      'create table if not exists bills (' +
+        'id integer primary key not null,' +
+        'name text,' +
+        'value float' +
+        'date date' +
+        'period text' +
+      ');'
     )
   })
 }
