@@ -69,17 +69,17 @@ export const selectIncomes = () => {
   return promisifyTx('select * from incomes', [])
 }
 
-export const insertIncome = (name, value) => {
+export const insertIncome = (name, value, date, period) => {
   return promisifyTx(
-    'insert into incomes (name, value) values(?, ?)', 
-    [name, value]
+    'insert into incomes (name, value, date, period) values(?, ?, ?, ?)', 
+    [name, value, date, period]
   )
 }
 
-export const updateIncome = (id, name, value) => {
+export const updateIncome = (id, name, value, date, period) => {
   return promisifyTx(
-    'update incomes set name = ?, value = ? where id = ?', 
-    [name, value, id]
+    'update incomes set name=?, value=?, date=?, period=? where id=?', 
+    [name, value, date, period, id]
   )
 }
 
@@ -91,17 +91,17 @@ export const selectBills = () => {
   return promisifyTx('select * from bills', [])
 }
 
-export const insertBill = (name, value) => {
+export const insertBill = (name, value, date, period) => {
   return promisifyTx(
-    'insert into bills (name, value) values(?, ?)', 
-    [name, value]
+    'insert into bills (name, value, date, period) values(?, ?, ?, ?)', 
+    [name, value, date, period]
   )
 }
 
-export const updateBill = (id, name, value) => {
+export const updateBill = (id, name, value, date, period) => {
   return promisifyTx(
-    'update bills set name = ?, value = ? where id = ?', 
-    [name, value, id]
+    'update bills set name=?, value=?, date=?, period=? where id=?', 
+    [name, value, date, period, id]
   )
 }
 

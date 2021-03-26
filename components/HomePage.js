@@ -38,15 +38,20 @@ const HomePage = ({ route, navigation }) => {
 
   useFocusEffect(() => {
     if (!route.params) return
+    const {id, name, value, period, date, type} = route.params
 
-    const {name, value, period, date, type} = route.params
-
-    if (type === 'account') {
+    if (type === 'account' && id) {
       addAccount(name, value)
-    } else if (type === 'income') {
+    } else if (type === 'income' && id) {
       addIncome(name, value, date, period)
-    } else if (type === 'bill') {
+    } else if (type === 'bill' && id) {
       addBill(name, value, date, period)
+    } else if (type === 'account') {
+      editAccount(id, name, value)
+    } else if (type === 'income') {
+      editIncome(id, name, value, date, period)
+    } else if (type === 'bill') {
+      editBill(id, name, value, date, period)
     }
   })
 
@@ -110,22 +115,22 @@ const HomePage = ({ route, navigation }) => {
       .catch(err => setError(err))
   }
 
-  const addIncome = (name, value) => {
+  const addIncome = (name, value, date, period) => {
     setLoadingIncomes(true)
-    insertIncome(name, value)
+    insertIncome(name, value, date, period)
       .finally(() => setLoadingIncomes(false))
       .then(({ insertId }) => setIncomes(
-        [...incomes, { id: insertId, name, value }]
+        [...incomes, { id: insertId, name, value, date, period }]
       ))
       .catch(err => setError(err))
   }
 
-  const addBill = (name, value) => {
+  const addBill = (name, value, date, period) => {
     setLoadingBills(true)
-    insertBill(name, value)
+    insertBill(name, value, date, period)
       .finally(() => setLoadingBills(false))
       .then(({ insertId }) => setBills(
-        [...bills, { id: insertId, name, value }]
+        [...bills, { id: insertId, name, value, date, period }]
       ))
       .catch(err => setError(err))
   }
@@ -140,22 +145,22 @@ const HomePage = ({ route, navigation }) => {
       .catch(err => setError(err))
   }
 
-  const editIncome = (id, name, value) => {
+  const editIncome = (id, name, value, date, period) => {
     setLoadingIncomes(true)
     updateIncome(id, name, value)
       .finally(setLoadingIncomes(false))
       .then(setIncomes(incomes.map(income => {
-        return income.id === id ? { id, name, value } : income
+        return income.id === id ? { id, name, value, date, period } : income
       })))
       .catch(err => setError(err))
   }
 
-  const editBill = (id, name, value) => {
+  const editBill = (id, name, value, date, period) => {
     setLoadingBills(true)
     updateBill(id, name, value)
       .finally(setLoadingBills(false))
       .then(setBills(bills.map(bill => {
-        return bill.id === id ? { id, name, value } : bill
+        return bill.id === id ? { id, name, value, date, period } : bill
       })))
       .catch(err => setError(err))
   }

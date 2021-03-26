@@ -1,8 +1,8 @@
 import React from 'react'
 import { BottomNavigation } from 'react-native-paper'
 
-import Accounts from './Accounts'
-import Bills from './Bills'
+import Accounts from './navPages/Accounts'
+import Incomes from './navPages/Incomes'
 import Spinner from './Spinner'
 
 const BottomNav = ({ 
@@ -25,8 +25,8 @@ const BottomNav = ({
 
   const renderScene = BottomNavigation.SceneMap({
     accounts: () => loadingAccounts ? <Spinner/> : Accounts({ accounts, removeAccount }),
-    incomes: () => loadingIncomes ? <Spinner/> : Bills({ incomes, removeAccount }),
-    bills: () => loadingBills ? <Spinner/> : Bills({ bills, removeAccount }),
+    incomes: () => loadingIncomes ? <Spinner/> : Incomes({ incomes, removeIncome }),
+    bills: () => loadingBills ? <Spinner/> : Incomes({ bills, removeBill }),
   })
 
   return (

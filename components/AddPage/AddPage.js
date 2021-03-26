@@ -8,18 +8,27 @@ import ValueInput from './ValueInput'
 import DateSelector from './DateSelector'
 import PeriodList from './PeriodList'
 
-const AddPage = ({ navigation, type }) => {
-  const [name, setName] = useState("")
-  const [value, setValue] = useState("")
-  const [date, setDate] = useState(new Date())
-  const [period, setPeriod] = useState('monthly')
+const AddPage = ({ 
+  navigation, 
+  type, 
+  id, 
+  defaultName: name, 
+  defaultValue: value,
+  defaultDate: date, 
+  defaultPeriod: period 
+}) => {
+  const [name, setName] = useState(defaultName)
+  const [value, setValue] = useState(defaultValue)
+  const [date, setDate] = useState(defaultDate || new Date())
+  const [period, setPeriod] = useState(defaultPeriod || 'monthly')
 
   const [validName, setValidName] = useState(true)
   const [validValue, setValidValue] = useState(true)
   
   const submit = () => {
     if (name && validName && value && validValue) {
-      navigation.navigate("HomePage", { 
+      navigation.navigate("HomePage", {
+        id,
         name,
         value: parseFloat(value), 
         type,
@@ -63,8 +72,7 @@ const AddPage = ({ navigation, type }) => {
 
       <Button mode="contained" style={styles.button} onPress={submit}>
         Accept
-      </Button>      
-
+      </Button>
     </View>
   )
 }
