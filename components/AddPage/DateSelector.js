@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { DatePickerModal } from 'react-native-paper-dates'
 import dayjs from 'dayjs'
 
@@ -8,7 +9,7 @@ const DateSelector = ({ date, setDate, style }) => {
 
   const selectDate = (selected) => {
     setOpen(false)
-    setDate(selected)
+    setDate(selected.date)
   }
 
   return (

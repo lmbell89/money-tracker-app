@@ -7,7 +7,7 @@ const Incomes = ({ navigation, items, deleteFn }) => {
     navigation={navigation} 
     items={items} 
     deleteFn={deleteFn} 
-    type="income" 
+    type="bill" 
   />
 }
 

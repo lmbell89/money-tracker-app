@@ -1,17 +1,36 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { Text, StyleSheet } from 'react-native'
 import { Card, Button } from 'react-native-paper'
 
-const Item = ({ id, name, value, period, deleteFn }) => {
+const Item = ({ 
+  id, 
+  name, 
+  value, 
+  date, 
+  period, 
+  type,
+  deleteFn, 
+  navigation 
+}) => {
+
+  const editItem = () => navigation.navigate("Add", {
+    id,
+    defaultName: name,
+    defaultValue: value.toString(),
+    defaultDate: date,
+    defaultPeriod: period,
+    type
+  })
+
   return (
-    <Card key={id}>
-      <Card.Title
-        left={(name) => <Text>{name}</Text>}
-        right={(value) > <Text>{`£${value.toFixed(2)}`}</Text>}
-        subtitle={period || null}
+    <Card key={id} style={styles.card}>
+      <Card.Title 
+        title={name}
+        right={() => <Text>{`£${parseFloat(value).toFixed(2)}`}</Text>}
+        subtitle={period || ""}
       />
       <Card.Actions>
-        <Button onPress={() => deleteFn(id)}>
+        <Button onPress={editItem}>
           Edit
         </Button>
         <Button onPress={() => deleteFn(id)}>
@@ -21,5 +40,13 @@ const Item = ({ id, name, value, period, deleteFn }) => {
     </Card>
   )
 }
+
+const styles = StyleSheet.create({
+  card: {
+    marginVertical: 5,
+    marginHorizontal: 10,
+    paddingRight: 10
+  }
+})
 
 export default Item

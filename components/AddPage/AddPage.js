@@ -2,24 +2,20 @@ import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper'
 import isCurrency from 'validator/lib/isCurrency'
+import dayjs from 'dayjs'
 
 import NameInput from './NameInput'
 import ValueInput from './ValueInput'
 import DateSelector from './DateSelector'
 import PeriodList from './PeriodList'
 
-const AddPage = ({ 
-  navigation, 
-  type, 
-  id, 
-  defaultName: name, 
-  defaultValue: value,
-  defaultDate: date, 
-  defaultPeriod: period 
-}) => {
+const AddPage = ({ route, navigation }) => {
+
+  const { type, id, defaultName, defaultValue, defaultDate, defaultPeriod } = route.params || {}
+
   const [name, setName] = useState(defaultName)
   const [value, setValue] = useState(defaultValue)
-  const [date, setDate] = useState(defaultDate || new Date())
+  const [date, setDate] = useState(defaultDate ? dayjs(defaultDate, 'YYYY-MM-DD').valueOf() : new Date())
   const [period, setPeriod] = useState(defaultPeriod || 'monthly')
 
   const [validName, setValidName] = useState(true)
@@ -28,12 +24,12 @@ const AddPage = ({
   const submit = () => {
     if (name && validName && value && validValue) {
       navigation.navigate("HomePage", {
-        id,
-        name,
+        id: id,
+        name: name,
         value: parseFloat(value), 
         type,
-        date,
-        period
+        date: dayjs(date).format('YYYY-MM-DD'),
+        period: period
       })
     }
   }
@@ -46,7 +42,7 @@ const AddPage = ({
   const changeValue = (value) => {
     setValue(value)
     setValidValue(
-      isCurrency(value.toString(), {digits_after_decimal: [0, 1, 2]})
+      isCurrency(value?.toString(), {digits_after_decimal: [0, 1, 2]})
     )
   }
 

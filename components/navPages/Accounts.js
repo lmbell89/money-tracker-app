@@ -3,10 +3,10 @@ import { View } from 'react-native'
 
 import Item from './Item'
 
-const Accounts = ({ accounts, deleteAccount }) => {
+const Accounts = ({ navigation, items, deleteFn }) => {
   return(
-    <View>
-      {accounts.map(account => Item({...account, deleteAccount }))}
+    <View style={{padding: 10}}>
+      {items?.map(item => Item({...item, deleteFn, navigation, type: "account" }))}
     </View>    
   )
 }

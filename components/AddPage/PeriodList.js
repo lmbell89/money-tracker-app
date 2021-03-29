@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
-import { List } from 'react-native-paper'
+import { List, DefaultTheme } from 'react-native-paper'
 
 const PeriodList = ({ period, setPeriod }) => {
   const [listOpen, setListOpen] = useState(false)

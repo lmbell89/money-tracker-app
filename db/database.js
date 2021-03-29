@@ -13,8 +13,8 @@ export const migrate = () => {
       'create table if not exists incomes (' +
         'id integer primary key not null,' +
         'name text,' +
-        'value float' +
-        'date date' +
+        'value float,' +
+        'date text,' +
         'period text' +
       ');'
     )
@@ -22,8 +22,8 @@ export const migrate = () => {
       'create table if not exists bills (' +
         'id integer primary key not null,' +
         'name text,' +
-        'value float' +
-        'date date' +
+        'value float,' +
+        'date text,' +
         'period text' +
       ');'
     )

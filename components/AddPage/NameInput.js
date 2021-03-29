@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { TextInput, HelperText } from 'react-native-paper'
 
-const NameInput = ({ name, changeName, validName, validateName }) => {
+const NameInput = ({ name, changeName, validName }) => {
   const display = validName ? "none" : "flex"
 
   return (

@@ -1,16 +1,14 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { FAB, Portal } from 'react-native-paper'
+import { FAB } from 'react-native-paper'
 
-const AddButton = ({ navigation, navType }) => {
+const AddButton = ({ navigation, type }) => {
   return(
-    <Portal>
-      <FAB
-        style={styles.fab}
-        icon="plus"
-        onPress={() => navigation.navigate("Add", { type: navType })}
-      />
-    </Portal>
+    <FAB
+      style={styles.fab}
+      icon="plus"
+      onPress={() => navigation.navigate("Add", { type })}
+    />
   )
 }
 

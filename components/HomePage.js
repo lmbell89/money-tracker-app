@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { Portal } from 'react-native-paper'
 
@@ -41,21 +41,21 @@ const HomePage = ({ route, navigation }) => {
     const {id, name, value, period, date, type} = route.params
 
     if (type === 'account' && id) {
-      addAccount(name, value)
-    } else if (type === 'income' && id) {
-      addIncome(name, value, date, period)
-    } else if (type === 'bill' && id) {
-      addBill(name, value, date, period)
-    } else if (type === 'account') {
       editAccount(id, name, value)
-    } else if (type === 'income') {
+    } else if (type === 'income' && id) {
       editIncome(id, name, value, date, period)
-    } else if (type === 'bill') {
+    } else if (type === 'bill' && id) {
       editBill(id, name, value, date, period)
+    } else if (type === 'account') {
+      addAccount(name, value)
+    } else if (type === 'income') {
+      addIncome(name, value, date, period)
+    } else if (type === 'bill') {
+      addBill(name, value, date, period)
     }
-  })
 
-  const navType = ['accounts', 'incomes', 'bills'][navIndex]
+    route.params = null
+  })
 
   const getAccounts = () => {
     setLoadingAccounts(true)
@@ -85,7 +85,7 @@ const HomePage = ({ route, navigation }) => {
     setLoadingAccounts(true)
     deleteAccount(id)
       .finally(() => setLoadingAccounts(false))
-      .then(setAccounts(accounts.filter(account => account.id !== id)))
+      .then(() => setAccounts(accounts.filter(account => account.id !== id)))
       .catch(err => setError(err))
   }
 
@@ -93,7 +93,7 @@ const HomePage = ({ route, navigation }) => {
     setLoadingIncomes(true)
     deleteIncome(id)
       .finally(() => setLoadingIncomes(false))
-      .then(setIncomes(income.filter(income => income.id !== id)))
+      .then(() => setIncomes(incomes.filter(income => income.id !== id)))
       .catch(err => setError(err))
   }
 
@@ -101,21 +101,21 @@ const HomePage = ({ route, navigation }) => {
     setLoadingBills(true)
     deleteBill(id)
       .finally(() => setLoadingBills(false))
-      .then(setBills(bills.filter(bills => bills.id !== id)))
+      .then(() => setBills(bills.filter(bills => bills.id !== id)))
       .catch(err => setError(err))
   }
 
-  const addAccount = (name, balance) => {
+  const addAccount = (name, value) => {
     setLoadingAccounts(true)
-    insertAccount(name, balance)
+    insertAccount(name, value)
       .finally(() => setLoadingAccounts(false))
       .then(({ insertId }) => setAccounts(
-        [...accounts, { id: insertId, name, balance }]
+        [...accounts, { id: insertId, name, value }]
       ))
       .catch(err => setError(err))
   }
 
-  const addIncome = (name, value, date, period) => {
+  const addIncome = useCallback((name, value, date, period) => {
     setLoadingIncomes(true)
     insertIncome(name, value, date, period)
       .finally(() => setLoadingIncomes(false))
@@ -123,7 +123,7 @@ const HomePage = ({ route, navigation }) => {
         [...incomes, { id: insertId, name, value, date, period }]
       ))
       .catch(err => setError(err))
-  }
+  })
 
   const addBill = (name, value, date, period) => {
     setLoadingBills(true)
@@ -145,25 +145,27 @@ const HomePage = ({ route, navigation }) => {
       .catch(err => setError(err))
   }
 
-  const editIncome = (id, name, value, date, period) => {
+  const editIncome = useCallback((id, name, value, date, period) => {
     setLoadingIncomes(true)
-    updateIncome(id, name, value)
+    updateIncome(id, name, value, date, period)
       .finally(setLoadingIncomes(false))
       .then(setIncomes(incomes.map(income => {
         return income.id === id ? { id, name, value, date, period } : income
       })))
       .catch(err => setError(err))
-  }
+  })
 
   const editBill = (id, name, value, date, period) => {
     setLoadingBills(true)
-    updateBill(id, name, value)
+    updateBill(id, name, value, date, period)
       .finally(setLoadingBills(false))
       .then(setBills(bills.map(bill => {
         return bill.id === id ? { id, name, value, date, period } : bill
       })))
       .catch(err => setError(err))
   }
+
+  const navType = ['summary', 'account', 'income', 'bill'][navIndex]
 
   return (
     <Portal.Host>
@@ -182,11 +184,16 @@ const HomePage = ({ route, navigation }) => {
         editAccount={editAccount}
         editIncome={editIncome}
         editBill={editBill}
+        navigation={navigation}
       />
 
       <Portal>
-        <AddButton navigation={navigation} navType={navType} />
-        <ErrorSnack error={error} setError={setError} />
+        <AddButton 
+          navigation={navigation} 
+          type={navType} 
+        />
+
+        {error ? <ErrorSnack error={error} setError={setError} /> : null}
       </Portal>
     </Portal.Host>
   )
