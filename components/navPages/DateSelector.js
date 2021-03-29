@@ -2,12 +2,16 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { DefaultTheme, HelperText, TextInput } from 'react-native-paper'
 
-const DateList = ({ cycleEnd, setCycleEnd }) => {
+const DateList = ({ cycleEnd, editCycleEnd }) => {
   const [error, setError] = useState(false)
 
   changeDate = (date) => {
-    setCycleEnd(date)
-    setError(!Number.isInteger(+date) || date < 1 || date > 31)
+    const valid = Number.isInteger(+date) && date > 0 || date < 32
+    setError(!valid)
+
+    if (valid) {
+      editCycleEnd(date)
+    }
   }
 
   const getText = (date) => {

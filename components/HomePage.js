@@ -18,6 +18,8 @@ import {
   updateAccount,
   updateIncome,
   updateBill,
+  selectCycle,
+  updateCycle
 } from '../db/database'
 
 const HomePage = ({ route, navigation }) => {
@@ -25,15 +27,18 @@ const HomePage = ({ route, navigation }) => {
   const [accounts, setAccounts] = useState([])
   const [incomes, setIncomes] = useState([])
   const [bills, setBills] = useState([])
+  const [loadingSummary, setLoadingSummary] = useState(false)
   const [loadingAccounts, setLoadingAccounts] = useState(false)
   const [loadingIncomes, setLoadingIncomes] = useState(false)
   const [loadingBills, setLoadingBills] = useState(false)
   const [error, setError] = useState(null)
+  const [cycleEnd, setCycleEnd] = useState(1)
   
   useEffect(() => {
     getAccounts()
     getIncomes()
     getBills()
+    getCycle()
   }, [])
 
   useFocusEffect(() => {
@@ -139,7 +144,7 @@ const HomePage = ({ route, navigation }) => {
     setLoadingAccounts(true)
     updateAccount(id, name, value)
       .finally(setLoadingAccounts(false))
-      .then(setAccounts(accounts.map(account => {
+      .then(() => setAccounts(accounts.map(account => {
         return account.id === id ? { id, name, value } : account
       })))
       .catch(err => setError(err))
@@ -149,7 +154,7 @@ const HomePage = ({ route, navigation }) => {
     setLoadingIncomes(true)
     updateIncome(id, name, value, date, period)
       .finally(setLoadingIncomes(false))
-      .then(setIncomes(incomes.map(income => {
+      .then(() => setIncomes(incomes.map(income => {
         return income.id === id ? { id, name, value, date, period } : income
       })))
       .catch(err => setError(err))
@@ -159,9 +164,25 @@ const HomePage = ({ route, navigation }) => {
     setLoadingBills(true)
     updateBill(id, name, value, date, period)
       .finally(setLoadingBills(false))
-      .then(setBills(bills.map(bill => {
+      .then(() => setBills(bills.map(bill => {
         return bill.id === id ? { id, name, value, date, period } : bill
       })))
+      .catch(err => setError(err))
+  }
+
+  const getCycle = () => {
+    setLoadingSummary(true)
+    selectCycle()
+      .finally(() => setLoadingSummary(false))
+      .then(({ rows: { _array }}) => setCycleEnd(_array[0][0]))
+      .catch(err => setError(err))
+  }
+
+  const editCycleEnd = (date) => {
+    setLoadingSummary(true)
+    updateCycle(date)
+      .finally(() => setLoadingSummary(false))
+      .then(() => setCycleEnd(date))
       .catch(err => setError(err))
   }
 
@@ -175,6 +196,7 @@ const HomePage = ({ route, navigation }) => {
         accounts={accounts}
         incomes={incomes}
         bills={bills}
+        loadingSummary={loadingSummary}
         loadingAccounts={loadingAccounts}
         loadingIncomes={loadingIncomes}
         loadingBills={loadingBills}
@@ -184,6 +206,8 @@ const HomePage = ({ route, navigation }) => {
         editAccount={editAccount}
         editIncome={editIncome}
         editBill={editBill}
+        cycleEnd={cycleEnd}
+        editCycleEnd={editCycleEnd}
         navigation={navigation}
       />
 

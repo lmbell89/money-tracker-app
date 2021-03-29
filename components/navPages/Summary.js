@@ -5,9 +5,7 @@ import dayjs from 'dayjs'
 
 import DateSelector from './DateSelector'
 
-const Summary = ({ accounts, incomes, bills }) => {
-  const [cycleEnd, setCycleEnd] = useState(1)
-
+const Summary = ({ accounts, incomes, bills, cycleEnd, editCycleEnd }) => {
   const now = new Date()
   let endDate = dayjs(now).date(cycleEnd)
 
@@ -72,7 +70,7 @@ const Summary = ({ accounts, incomes, bills }) => {
       </Card>
 
       <Card style={styles.card}>
-        <DateSelector cycleEnd={cycleEnd} setCycleEnd={setCycleEnd} />
+        <DateSelector cycleEnd={cycleEnd} editCycleEnd={editCycleEnd} />
       </Card>
     </View>
   )

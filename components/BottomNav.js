@@ -13,13 +13,16 @@ const BottomNav = ({
   accounts, 
   incomes, 
   bills,
+  loadingSummary,
   loadingAccounts,
   loadingIncomes,
   loadingBills,
   removeAccount,
   removeIncome,
   removeBill,
-  navigation
+  navigation,
+  cycleEnd,
+  editCycleEnd
 }) => {
   
   const routes = [
@@ -35,7 +38,7 @@ const BottomNav = ({
 
   const renderScene = BottomNavigation.SceneMap({
     summary: () => loadingAccounts || loadingIncomes || loadingBills ? <Spinner/> : 
-      Summary({ accounts, incomes, bills, cycleEnd: 1 }),
+      Summary({ accounts, incomes, bills, cycleEnd, editCycleEnd }),
     accounts: () => loadingAccounts ? <Spinner/> : accountsPage,
     incomes: () => loadingIncomes ? <Spinner/> : incomesPage,
     bills: () => loadingBills ? <Spinner/> : billsPage,

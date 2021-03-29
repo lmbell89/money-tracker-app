@@ -27,6 +27,15 @@ export const migrate = () => {
         'period text' +
       ');'
     )
+    tx.executeSql(
+      'create table if not exists cycles (' +
+        'id integer primary key not null,' +
+        'date integer' +
+      ');'
+    )
+    tx.executeSql(
+      'insert into cycles (id, date) values (0, 31) on conflict do nothing'
+    )
   })
 }
 
@@ -107,4 +116,12 @@ export const updateBill = (id, name, value, date, period) => {
 
 export const deleteBill = (id) => {
   return promisifyTx('delete from bills where id = ?', [id])
+}
+
+export const selectCycle = () => {
+  return promisifyTx('select top 1 date from cycles')
+}
+
+export const updateCycle = (date) => {
+  return promisifyTx('update cycles set date=?', [date])
 }
