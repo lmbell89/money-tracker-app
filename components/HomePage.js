@@ -188,11 +188,7 @@ const HomePage = ({ route, navigation }) => {
       />
 
       <Portal>
-        <AddButton 
-          navigation={navigation} 
-          type={navType} 
-        />
-
+        {navIndex === 0 ? null : <AddButton navigation={navigation} type={navType} /> }
         {error ? <ErrorSnack error={error} setError={setError} /> : null}
       </Portal>
     </Portal.Host>

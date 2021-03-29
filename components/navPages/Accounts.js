@@ -5,8 +5,8 @@ import Item from './Item'
 
 const Accounts = ({ navigation, items, deleteFn }) => {
   return(
-    <View style={{padding: 10}}>
-      {items?.map(item => Item({...item, deleteFn, navigation, type: "account" }))}
+    <View>
+      {items?.map(item => Item({...item, value: item.balance, deleteFn, navigation, type: "account" }))}
     </View>    
   )
 }

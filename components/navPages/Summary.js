@@ -1,9 +1,13 @@
-import React from 'react'
-import { View } from 'react-native'
-import { Card, Title } from 'react-native-paper'
+import React, { useState } from 'react'
+import { View, StyleSheet } from 'react-native'
+import { Card, Title, Headline, DefaultTheme } from 'react-native-paper'
 import dayjs from 'dayjs'
 
-const Summary = ({ accounts, incomes, bills, cycleEnd }) => {
+import DateSelector from './DateSelector'
+
+const Summary = ({ accounts, incomes, bills }) => {
+  const [cycleEnd, setCycleEnd] = useState(1)
+
   const now = new Date()
   let endDate = dayjs(now).date(cycleEnd)
 
@@ -12,11 +16,10 @@ const Summary = ({ accounts, incomes, bills, cycleEnd }) => {
   } 
   
   const numberDue = (start, periodType) => {
-    debugger
     const startDate = dayjs(start, 'YYYY-MM-DD')
     const daysUntil = startDate.diff(now, 'day')
 
-    if (startDate > now && startDate.diff(now, 'month') >= 1) {
+    if (startDate.diff(now, 'month') >= 1) {
       return 0 
     } else if (daysUntil > endDate.diff(now, 'day')) {
       return 0
@@ -39,9 +42,9 @@ const Summary = ({ accounts, incomes, bills, cycleEnd }) => {
   let currentTotal = 0
   let cycleTotal = 0
 
-  accounts.map(account => account.value).forEach(value => {
-    currentTotal += value
-    cycleTotal += value
+  accounts.map(account => account.balance).forEach(balance => {
+    currentTotal += balance
+    cycleTotal += balance
   })
 
   incomes.forEach(income => {
@@ -54,17 +57,36 @@ const Summary = ({ accounts, incomes, bills, cycleEnd }) => {
 
   return (
     <View>
-      <Card>
+      <Card style={styles.card}>
         <Title>Current Total</Title>
-        <Title>{'£' + currentTotal.toFixed(2)}</Title>
+        <Headline style={currentTotal < 0 ? styles.redText : null}>
+          {'£' + currentTotal.toFixed(2)}
+        </Headline>
       </Card>
 
-      <Card>
+      <Card style={styles.card}>
         <Title>End of Cycle</Title>
-        <Title>{'£' + cycleTotal.toFixed(2)}</Title>
+        <Headline style={cycleTotal < 0 ? styles.redText : null}>
+          {'£' + cycleTotal.toFixed(2)}
+        </Headline>
+      </Card>
+
+      <Card style={styles.card}>
+        <DateSelector cycleEnd={cycleEnd} setCycleEnd={setCycleEnd} />
       </Card>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  card: {
+    marginVertical: 5,
+    marginHorizontal: 10,
+    padding: 10
+  },
+  redText: {
+    color: DefaultTheme.colors.error
+  }
+})
 
 export default Summary

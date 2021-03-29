@@ -11,7 +11,7 @@ const ValueInput = ({ value, changeValue, validValue, label, style }) => {
         style={style}
         left={<TextInput.Affix text="£ " />}
         label={label}
-        keyboardType={"numeric"}
+        keyboardType="numeric"
         value={value}
         error={!validValue}
         onChangeText={changeValue}
