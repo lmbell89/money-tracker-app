@@ -1,13 +1,19 @@
 import React from 'react'
-import { View } from 'react-native'
+import { ScrollView } from 'react-native'
 
 import Item from './Item'
 
 const Accounts = ({ navigation, items, deleteFn }) => {
   return(
-    <View>
-      {items?.map(item => Item({...item, value: item.balance, deleteFn, navigation, type: "account" }))}
-    </View>    
+    <ScrollView>
+      {items?.map(item => Item({
+        ...item, 
+        value: item.balance, 
+        deleteFn, 
+        navigation, 
+        type: "account" 
+      }))}
+    </ScrollView>    
   )
 }
 

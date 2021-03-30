@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper'
 import isCurrency from 'validator/lib/isCurrency'
 import dayjs from 'dayjs'
@@ -10,12 +10,20 @@ import DateSelector from './DateSelector'
 import PeriodList from './PeriodList'
 
 const AddPage = ({ route, navigation }) => {
-
-  const { type, id, defaultName, defaultValue, defaultDate, defaultPeriod } = route.params || {}
+  const { 
+    type, 
+    id, 
+    defaultName, 
+    defaultValue, 
+    defaultDate, 
+    defaultPeriod 
+  } = route.params || {}
 
   const [name, setName] = useState(defaultName)
   const [value, setValue] = useState(defaultValue)
-  const [date, setDate] = useState(defaultDate ? dayjs(defaultDate, 'YYYY-MM-DD').valueOf() : new Date())
+  const [date, setDate] = useState(defaultDate ? 
+    dayjs(defaultDate, 'YYYY-MM-DD').toDate() : new Date()
+  )
   const [period, setPeriod] = useState(defaultPeriod || 'monthly')
 
   const [validName, setValidName] = useState(true)
@@ -47,7 +55,7 @@ const AddPage = ({ route, navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <NameInput name={name} changeName={changeName} validName={validName} />
 
       <ValueInput 
@@ -69,7 +77,7 @@ const AddPage = ({ route, navigation }) => {
       <Button mode="contained" style={styles.button} onPress={submit}>
         Accept
       </Button>
-    </View>
+    </ScrollView>
   )
 }
 

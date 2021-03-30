@@ -1,29 +1,18 @@
-import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { DefaultTheme, HelperText, TextInput } from 'react-native-paper'
+import React from 'react'
+import { View } from 'react-native'
+import { HelperText, TextInput } from 'react-native-paper'
 
-const DateList = ({ cycleEnd, editCycleEnd }) => {
-  const [error, setError] = useState(false)
-
-  changeDate = (date) => {
-    const valid = Number.isInteger(+date) && date > 0 || date < 32
-    setError(!valid)
-
-    if (valid) {
-      editCycleEnd(date)
-    }
-  }
-
-  const getText = (date) => {
-    switch (date.toString().slice(-1)) {
+const DateList = ({ date, setDate, error }) => {
+  const getText = (n) => {
+    switch (n.toString().slice(-1)) {
       case '1':
-        return `${date}st of the month`
+        return `${n}st of the month`
       case '2':
-        return `${date}nd of the month`
+        return `${n}nd of the month`
       case '3':
-        return `${date}rd of the month`
+        return `${n}rd of the month`
       default:
-        return `${date}th of the month`
+        return `${n}th of the month`
     }
   }
 
@@ -32,11 +21,11 @@ const DateList = ({ cycleEnd, editCycleEnd }) => {
       <TextInput
         mode="outlined"
         label="End of Cycle"
-        value={cycleEnd.toString()}
+        value={date.toString()}
         keyboardType="numeric"
-        right={<TextInput.Affix text={getText(cycleEnd)} />}
+        right={<TextInput.Affix text={getText(date)} />}
         error={error}
-        onChangeText={changeDate}
+        onChangeText={setDate}
       />
 
       <HelperText type="error" visible={error}>
@@ -45,21 +34,5 @@ const DateList = ({ cycleEnd, editCycleEnd }) => {
     </View>
   )
 }
-
-const styles = StyleSheet.create(
-  {
-    list: {
-      marginTop: 10,
-      backgroundColor: '#E7E7E7',
-      borderBottomColor: '#ABABAB',
-      borderBottomWidth: 1,
-      borderTopLeftRadius: 5,
-      borderTopRightRadius: 5
-    },
-    listItem: {
-      backgroundColor: DefaultTheme.colors.background,
-    },
-  }
-)
 
 export default DateList

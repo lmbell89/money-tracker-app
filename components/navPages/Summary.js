@@ -1,39 +1,72 @@
 import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
-import { Card, Title, Headline, DefaultTheme } from 'react-native-paper'
+import { ScrollView, StyleSheet } from 'react-native'
+import { Card, Title, Headline, Button, DefaultTheme } from 'react-native-paper'
 import dayjs from 'dayjs'
 
 import DateSelector from './DateSelector'
 
-const Summary = ({ accounts, incomes, bills, cycleEnd, editCycleEnd }) => {
-  const now = new Date()
-  let endDate = dayjs(now).date(cycleEnd)
+const numberDue = (start, periodType, cycleEnd) => {
+  const now = dayjs()
+  const startDate = dayjs(start, 'YYYY-MM-DD')
+  const endDate = cycleEnd < now.date() ? 
+    dayjs().date(cycleEnd).add(1, 'month') :
+    dayjs().date(cycleEnd)
 
-  if (cycleEnd < now.getDate()) {
-    endDate = dayjs(now).add(1, 'month')
-  } 
+  const daysInCycle = endDate.diff(now, 'day')
+  let daysUntilBill
   
-  const numberDue = (start, periodType) => {
-    const startDate = dayjs(start, 'YYYY-MM-DD')
-    const daysUntil = startDate.diff(now, 'day')
+  if (periodType === 'monthly') {
+    const addMonth = startDate.date() <= now.date() ? 1 : 0
+    const nextBill = startDate.add(addMonth, 'month')
+    daysUntilBill = Math.ceil(nextBill.diff(now, 'day', true))
 
-    if (startDate.diff(now, 'month') >= 1) {
-      return 0 
-    } else if (daysUntil > endDate.diff(now, 'day')) {
-      return 0
-    } else if (daysUntil === 0) {
-      return 0
-    }
+  } else if (periodType === 'fortnightly') {
+    const fortnightsAgo = Math.floor(now.diff(startDate, 'week') / 2)
+    const nextBill = startDate.add((fortnightsAgo + 1) * 2, 'week')
+    daysUntilBill = Math.ceil(nextBill.diff(now, 'day', true))
 
-    switch(periodType) {
-      case 'monthly':
-        return 1
-      case 'fortnightly':
-        return Math.floor(daysUntil / 14)
-      case 'weekly':
-        return Math.floor(daysUntil / 7)
-      case 'daily':
-        return daysUntil
+  } else if (periodType === 'weekly') {
+    const weeksAgo = now.diff(startDate, 'week')
+    const nextBill = startDate.add(weeksAgo + 1, 'week')
+    daysUntilBill = Math.ceil(nextBill.diff(now, 'day', true))
+
+  } else if (periodType === 'daily') {
+    daysUntilBill = 1
+  }
+
+  if (startDate.diff(now, 'month') >= 1) {
+    return 0 
+  } else if (daysUntilBill > daysInCycle) {
+    return 0
+  } else if (daysUntilBill === 0) {
+    return 0
+  }
+
+  switch(periodType) {
+    case 'monthly':
+      return 1
+    case 'fortnightly':
+      return 1 + Math.floor((daysInCycle - daysUntilBill) / 14)
+    case 'weekly':
+      return 1 + Math.floor((daysInCycle - daysUntilBill) / 7)
+    case 'daily':
+      return daysInCycle
+  }
+}
+
+
+const Summary = ({ accounts, incomes, bills, cycleEnd, editCycleEnd }) => {
+  const [selectedDate, setSelectedDate] = useState(cycleEnd)
+  const [dateValid, setDateValid] = useState(true)
+
+  const changeDate = (date) => {
+    setSelectedDate(date)
+    setDateValid(Number.isInteger(+date) && date < 32 && date > 0)
+  }
+
+  const submitDate = () => {
+    if (dateValid) {
+      editCycleEnd(selectedDate)
     }
   }
 
@@ -46,15 +79,16 @@ const Summary = ({ accounts, incomes, bills, cycleEnd, editCycleEnd }) => {
   })
 
   incomes.forEach(income => {
-    cycleTotal += income.value * numberDue(income.date, income.period)
+    cycleTotal += income.value * numberDue(income.date, income.period, cycleEnd)
   })
 
   bills.forEach(bill => {
-    cycleTotal -= bill.value * numberDue(bill.date, bill.period)
+    debugger
+    cycleTotal -= bill.value * numberDue(bill.date, bill.period, cycleEnd)
   })
 
   return (
-    <View>
+    <ScrollView>
       <Card style={styles.card}>
         <Title>Current Total</Title>
         <Headline style={currentTotal < 0 ? styles.redText : null}>
@@ -70,9 +104,22 @@ const Summary = ({ accounts, incomes, bills, cycleEnd, editCycleEnd }) => {
       </Card>
 
       <Card style={styles.card}>
-        <DateSelector cycleEnd={cycleEnd} editCycleEnd={editCycleEnd} />
+        <DateSelector 
+          date={selectedDate} 
+          setDate={changeDate} 
+          error={!dateValid} 
+        />
+
+        <Card.Actions>
+          <Button 
+            onPress={submitDate} 
+            disabled={!dateValid && selectedDate !== cycleEnd}
+          >
+            Update
+          </Button>
+        </Card.Actions>
       </Card>
-    </View>
+    </ScrollView>
   )
 }
 

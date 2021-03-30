@@ -16,7 +16,8 @@ export default function App() {
 
   useEffect(() => {
     migrate()
-    setLoaded(true)
+    .then(() => setLoaded(true))
+    .catch((err) => console.log(err))
   }, [])
 
   const loadedContent = (

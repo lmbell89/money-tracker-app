@@ -1,10 +1,10 @@
 import React from 'react'
 import { BottomNavigation } from 'react-native-paper'
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 
 import Summary from './navPages/Summary'
 import Accounts from './navPages/Accounts'
-import Incomes from './navPages/Incomes'
-import Bills from './navPages/Bills'
+import IncomesBills from './navPages/IncomesBills'
 import Spinner from './Spinner'
 
 const BottomNav = ({ 
@@ -26,22 +26,64 @@ const BottomNav = ({
 }) => {
   
   const routes = [
-    { key: 'summary', title: 'Summary', icon: 'history' },
-    { key: 'accounts', title: 'Accounts', icon: 'card-account-details-outline' },
-    { key: 'incomes', title: 'Incomes', icon: 'history' },
-    { key: 'bills', title: 'Bills', icon: 'history' },
+    { 
+      key: 'summary', 
+      title: 'Summary', 
+      icon: "speedometer" 
+    },
+    { 
+      key: 'accounts', 
+      title: 'Accounts', 
+      icon: ({size, color}) => (
+      <FontAwesome 
+        name="bank" 
+        size={size - 6} 
+        style={{ color: color }} 
+      />)
+    },
+    { 
+      key: 'incomes', 
+      title: 'Incomes', 
+      icon: ({size, color}) => (
+        <FontAwesome 
+          name="dollar" 
+          size={size - 6} 
+          style={{ color: color }} 
+        />)
+    },
+    { 
+      key: 'bills',
+      title: 'Bills', 
+      icon: ({size, color}) => (
+        <FontAwesome5 
+          name="wallet" 
+          size={size - 6} 
+          style={{ color: color }} 
+        />)
+    },
   ]
 
-  const accountsPage = Accounts({ items: accounts, deleteFn: removeAccount, navigation })
-  const incomesPage = Incomes({ items: incomes, deleteFn: removeIncome, navigation })
-  const billsPage = Bills({ items: bills, deleteFn: removeBill, navigation })
-
   const renderScene = BottomNavigation.SceneMap({
-    summary: () => loadingAccounts || loadingIncomes || loadingBills ? <Spinner/> : 
+    summary: () => loadingAccounts || loadingIncomes || 
+      loadingBills || loadingSummary ? <Spinner/> : 
       Summary({ accounts, incomes, bills, cycleEnd, editCycleEnd }),
-    accounts: () => loadingAccounts ? <Spinner/> : accountsPage,
-    incomes: () => loadingIncomes ? <Spinner/> : incomesPage,
-    bills: () => loadingBills ? <Spinner/> : billsPage,
+    accounts: () => loadingAccounts ? <Spinner/> : Accounts({ 
+      items: accounts, 
+      deleteFn: removeAccount, 
+      navigation 
+    }),
+    incomes: () => loadingIncomes ? <Spinner/> : IncomesBills({ 
+      items: incomes, 
+      deleteFn: removeIncome, 
+      navigation,
+      type: 'income'
+    }),
+    bills: () => loadingBills ? <Spinner/> : IncomesBills({ 
+      items: bills,
+      deleteFn: removeBill, 
+      navigation,
+      type: 'bill'
+    }),
   })
 
   return (

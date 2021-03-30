@@ -164,7 +164,7 @@ const HomePage = ({ route, navigation }) => {
     setLoadingBills(true)
     updateBill(id, name, value, date, period)
       .finally(setLoadingBills(false))
-      .then(() => setBills(bills.map(bill => {
+      .then(setBills(bills.map(bill => {
         return bill.id === id ? { id, name, value, date, period } : bill
       })))
       .catch(err => setError(err))
@@ -174,7 +174,7 @@ const HomePage = ({ route, navigation }) => {
     setLoadingSummary(true)
     selectCycle()
       .finally(() => setLoadingSummary(false))
-      .then(({ rows: { _array }}) => setCycleEnd(_array[0][0]))
+      .then(({ rows: { _array }}) => setCycleEnd(_array[0].date))
       .catch(err => setError(err))
   }
 

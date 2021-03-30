@@ -1,43 +1,6 @@
 import * as SQLite from 'expo-sqlite'
 
-export const db = SQLite.openDatabase('expenses-app')
-
-export const migrate = () => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'create table if not exists accounts (' +
-        'id integer primary key not null, name text, balance float' +
-      ');'
-    )
-    tx.executeSql(
-      'create table if not exists incomes (' +
-        'id integer primary key not null,' +
-        'name text,' +
-        'value float,' +
-        'date text,' +
-        'period text' +
-      ');'
-    )
-    tx.executeSql(
-      'create table if not exists bills (' +
-        'id integer primary key not null,' +
-        'name text,' +
-        'value float,' +
-        'date text,' +
-        'period text' +
-      ');'
-    )
-    tx.executeSql(
-      'create table if not exists cycles (' +
-        'id integer primary key not null,' +
-        'date integer' +
-      ');'
-    )
-    tx.executeSql(
-      'insert into cycles (id, date) values (0, 31) on conflict do nothing'
-    )
-  })
-}
+const db = SQLite.openDatabase('expenses-app')
 
 const promisifyTx = (statement, args) => {
   return new Promise((resolve, reject) => {
@@ -51,6 +14,60 @@ const promisifyTx = (statement, args) => {
     })
   })
 }
+
+export const migrate = async () => {
+  const commands = []
+
+  commands.push(promisifyTx(
+    'create table if not exists accounts (' +
+      'id integer primary key not null, name text, balance float' +
+    ');'
+  ))
+
+  commands.push(promisifyTx(
+    'create table if not exists incomes (' +
+      'id integer primary key not null,' +
+      'name text,' +
+      'value float,' +
+      'date text,' +
+      'period text' +
+    ');'
+  ))
+
+  commands.push(promisifyTx(
+    'create table if not exists bills (' +
+      'id integer primary key not null,' +
+      'name text,' +
+      'value float,' +
+      'date text,' +
+      'period text' +
+    ');'
+  ))
+
+  commands.push(new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'create table if not exists cycles (' +
+          'id integer primary key not null,' +
+          'date integer' +
+        ');',
+        [],
+        null,
+        (_, err) => reject(err)
+      )
+
+      tx.executeSql(
+        'insert into cycles (id, date) values (0, 31)',
+        [],
+        resolve,
+        resolve
+      )
+    })
+  }))
+
+  return Promise.all(commands)
+}
+
 
 export const selectAccounts = () => {
   return promisifyTx('select * from accounts', [])
@@ -119,7 +136,7 @@ export const deleteBill = (id) => {
 }
 
 export const selectCycle = () => {
-  return promisifyTx('select top 1 date from cycles')
+  return promisifyTx('select date from cycles')
 }
 
 export const updateCycle = (date) => {
