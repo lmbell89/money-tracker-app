@@ -1,6 +1,3 @@
 centre spinner
-test error snack
-income and bills pages
-overview page
+f is not function - coming from cycle?
 spinner during migrate
-color scheme and background?

@@ -16,7 +16,7 @@ const PeriodList = ({ period, setPeriod }) => {
   return (
     <List.Accordion
       title={setCaps(period)}
-      description='Time Period'
+      description='Frequency'
       expanded={listOpen}
       onPress={() => setListOpen(!listOpen)}
       style={styles.list}
