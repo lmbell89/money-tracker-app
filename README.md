@@ -8,16 +8,15 @@
 
 <h2>Installation</h2>
 <p>
-  Clone the repo then run the following command to install dependencies:
-  ``` npm
-  npm i
-  ```
+  Clone the repo then run the following command to install dependencies: <br/>
+  <code>npm i</code>
 </p>
+
 
 <h2>Usage</h2>
 <p>
   This project was created using expo, so you can use expo to test the app.
-  See the [expo website](https://docs.expo.io/) for more information.
+  See the <a href="https://docs.expo.io/">expo website</a> for more information.
 </p>
 <p>
   There is currently no APK but I will add one in the future.
