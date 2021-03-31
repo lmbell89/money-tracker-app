@@ -67,7 +67,7 @@ const BottomNav = ({
     summary: () => loadingAccounts || loadingIncomes || 
       loadingBills || loadingSummary ? <Spinner/> : 
       Summary({ accounts, incomes, bills, cycleEnd, editCycleEnd }),
-    accounts: () => true ? <Spinner/> : Accounts({ 
+    accounts: () => loadingAccounts ? <Spinner/> : Accounts({ 
       items: accounts, 
       deleteFn: removeAccount, 
       navigation 
