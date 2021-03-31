@@ -8,6 +8,7 @@ import { migrate } from './db/database'
 import HomePage from './components/HomePage'
 import AddPage from './components/AddPage'
 import TopNav from './components/TopNav'
+import Spinner from './components/Spinner'
 
 const Stack = createStackNavigator()
 
@@ -34,5 +35,5 @@ export default function App() {
     </PaperProvider>
   )
 
-  return loaded ? loadedContent : null
+  return loaded ? loadedContent : <Spinner />
 } 
