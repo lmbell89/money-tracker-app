@@ -143,9 +143,9 @@ const HomePage = ({ route, navigation }) => {
   const editAccount = (id, name, value) => {
     setLoadingAccounts(true)
     updateAccount(id, name, value)
-      .finally(setLoadingAccounts(false))
+      .finally(() => setLoadingAccounts(false))
       .then(() => setAccounts(accounts.map(account => {
-        return account.id === id ? { id, name, value } : account
+        return account.id === id ? { id, name, balance: value } : account
       })))
       .catch(err => setError(err))
   }
@@ -153,7 +153,7 @@ const HomePage = ({ route, navigation }) => {
   const editIncome = useCallback((id, name, value, date, period) => {
     setLoadingIncomes(true)
     updateIncome(id, name, value, date, period)
-      .finally(setLoadingIncomes(false))
+      .finally(() => setLoadingIncomes(false))
       .then(() => setIncomes(incomes.map(income => {
         return income.id === id ? { id, name, value, date, period } : income
       })))
@@ -163,8 +163,8 @@ const HomePage = ({ route, navigation }) => {
   const editBill = (id, name, value, date, period) => {
     setLoadingBills(true)
     updateBill(id, name, value, date, period)
-      .finally(setLoadingBills(false))
-      .then(setBills(bills.map(bill => {
+      .finally(() => setLoadingBills(false))
+      .then(() => setBills(bills.map(bill => {
         return bill.id === id ? { id, name, value, date, period } : bill
       })))
       .catch(err => setError(err))
